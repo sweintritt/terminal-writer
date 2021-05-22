@@ -1,9 +1,11 @@
-#include <iostream>
+
 #include <chrono>
-#include <random>
-#include <thread>
-#include <string>
+#include <functional>
+#include <iostream>
 #include <map>
+#include <random>
+#include <string>
+#include <thread>
 
 void run(std::uniform_int_distribution<int> characterWait) {
     std::random_device rd;

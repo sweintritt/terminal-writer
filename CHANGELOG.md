@@ -15,6 +15,7 @@
 ### Added
 
 * Showing available modes in help message.
+* New mode 80s-fast.
 
 ## [v0.1.0] - 2021-05-22
 
