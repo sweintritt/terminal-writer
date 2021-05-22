@@ -1,5 +1,7 @@
 .PHONY: all clean check run
 
+APP=tw
+SRC=terminal_writer.cpp
 GCC=g++
 STD=c++11
 FLAGS=-std=$(STD) \
@@ -17,10 +19,10 @@ FLAGS=-std=$(STD) \
 	  -Wfloat-equal \
 	  -ftrapv
 
-all: clean screenwriter
+all: clean $(APP)
 
 clean:
-	rm -f *.o screenwriter
+	rm -f *.o $(APP)
 
 check:
 	cppcheck . \
@@ -32,8 +34,5 @@ check:
 	--inconclusive \
 	--platform=unix64
 
-%: %.cpp
+$(APP): $(SRC)
 	$(GCC) $(FLAGS) -o $@ $< $(LIBS)
-
-%.o: %.cpp
-	$(GCC) $(FLAGS) -c $< $(LIBS)
