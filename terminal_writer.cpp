@@ -5,9 +5,7 @@
 #include <string>
 #include <map>
 
-static std::map<std::string, std::function<std::uniform_int_distribution<int>()>> modes;
-
-void run(std::uniform_int_distribution<int>& characterWait) {
+void run(std::uniform_int_distribution<int> characterWait) {
     std::random_device rd;
     std::mt19937 r(rd());
     std::uniform_int_distribution<int> lineWait(15, 675);
@@ -26,25 +24,32 @@ void run(std::uniform_int_distribution<int>& characterWait) {
     }
 }
 
+std::string getAvailableModes(std::map<std::string, std::function<std::uniform_int_distribution<int>()>> const& modes) {
+    std::string availableModes;
+
+    for (auto mode : modes) {
+        availableModes.append(mode.first).append(", ");
+    }
+
+    return availableModes;
+}
+
 int main(int argc, char* argv[]) {
+    std::map<std::string, std::function<std::uniform_int_distribution<int>()>> modes;
     modes.emplace("human", []() { return std::uniform_int_distribution<int>(75, 275); });
     modes.emplace("80s", []() { return std::uniform_int_distribution<int>(5, 25); });
+    modes.emplace("80s-fast", []() { return std::uniform_int_distribution<int>(5, 15); });
 
     if (argc > 1) {
-        std::string cmd{argv[1]};
-        // TODO Add a map of lambda expressions
+        std::string mode{argv[1]};
 
-        if (cmd.compare("human") == 0) {
-            std::uniform_int_distribution<int> human(75, 275);
-            run(human);
-        } else if (cmd.compare("80s") == 0) {
-            std::uniform_int_distribution<int> eighties(5, 25);
-            run(eighties);
+        if (modes.count(mode)) {
+            run(modes[mode]());
         } else {
-            std::cerr << "Unknown mode. Options are 'human' and '80s'" << std::endl;
+            std::cerr << "Unknown mode. Options are " << getAvailableModes(modes) << std::endl;
         }
     } else {
-            std::cerr << "No mode given. Options are 'human' and '80s'" << std::endl;
+            std::cerr << "No mode given. Options are " << getAvailableModes(modes) << std::endl;
         }
 
     return 0;
