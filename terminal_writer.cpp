@@ -38,9 +38,10 @@ std::string getAvailableModes(std::map<std::string, std::function<std::uniform_i
 
 int main(int argc, char* argv[]) {
     std::map<std::string, std::function<std::uniform_int_distribution<int>()>> modes;
-    modes.emplace("human", []() { return std::uniform_int_distribution<int>(75, 275); });
+    modes.emplace("human", []() { return std::uniform_int_distribution<int>(75, 375); });
     modes.emplace("80s", []() { return std::uniform_int_distribution<int>(5, 25); });
     modes.emplace("80s-fast", []() { return std::uniform_int_distribution<int>(5, 15); });
+    modes.emplace("wc4", []() { return std::uniform_int_distribution<int>(45, 55); });
 
     if (argc > 1) {
         std::string mode{argv[1]};
