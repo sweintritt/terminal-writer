@@ -2,6 +2,10 @@
 #include <chrono>
 #include <random>
 #include <thread>
+#include <string>
+#include <map>
+
+static std::map<std::string, std::function<std::uniform_int_distribution<int>()>> modes;
 
 void run(std::uniform_int_distribution<int>& characterWait) {
     std::random_device rd;
@@ -11,7 +15,7 @@ void run(std::uniform_int_distribution<int>& characterWait) {
     // a short break before starting
     std::this_thread::sleep_for(std::chrono::seconds(2));
     for (std::string line; std::getline(std::cin, line);) {
-        
+
         for (unsigned int i = 0; i < line.size(); ++i) {
             std::cout << line[i] << std::flush;
             std::this_thread::sleep_for(std::chrono::milliseconds(characterWait(r)));
@@ -23,6 +27,9 @@ void run(std::uniform_int_distribution<int>& characterWait) {
 }
 
 int main(int argc, char* argv[]) {
+    modes.emplace("human", []() { return std::uniform_int_distribution<int>(75, 275); });
+    modes.emplace("80s", []() { return std::uniform_int_distribution<int>(5, 25); });
+
     if (argc > 1) {
         std::string cmd{argv[1]};
         // TODO Add a map of lambda expressions
