@@ -4,13 +4,9 @@
 
 ## Added
 
-*
+* New mode wc4.
 
 ## [v0.2.0] - 2021-05-22
-
-### Changed
-
-* Using a map for all different modes.
 
 ### Added
 
