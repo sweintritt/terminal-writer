@@ -1,15 +1,16 @@
 
 #include <chrono>
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <random>
 #include <string>
 #include <thread>
 
-void run(std::uniform_int_distribution<int> characterWait);
-std::string getAvailableModes(std::map<std::string, std::function<std::uniform_int_distribution<int>()>> const& modes);
-
+/**
+ * Settings for a write mode.
+ */
 typedef struct Mode {
     std::string name;
     std::string description;
@@ -23,6 +24,9 @@ typedef struct Mode {
          std::function<std::uniform_int_distribution<int>()> _characterWait,
          std::function<std::uniform_int_distribution<int>()> _lineWait) : name(_name), description(_description), characterWait(_characterWait), lineWait(_lineWait) { }
 } Mode;
+
+void run(std::uniform_int_distribution<int> characterWait);
+void showHelp(const std::map<std::string, Mode>& modes);
 
 void run(Mode& mode) {
     std::random_device rd;
@@ -44,33 +48,39 @@ void run(Mode& mode) {
     }
 }
 
-std::string getAvailableModes(std::map<std::string, Mode> const& modes) {
-    std::string availableModes;
+void showHelp(const std::map<std::string, Mode>& modes) {
+    std::cout << "terminal-writer - Reads text from stdin an writes it to stdout like in old movies." << std::endl << std::endl;
+    std::cout << "tw [MODE]" << std::endl << std::endl;
+    std::cout << "Modes:" << std::endl << std::endl;
 
     for (auto mode : modes) {
-        availableModes.append(mode.first).append(", ");
+        std::cout << "  " << std::setw(11) << std::left << mode.second.name << mode.second.description << std::endl;
     }
 
-    return availableModes;
+    //std::cout << std::endl;
 }
 
 int main(int argc, char* argv[]) {
     std::map<std::string, Mode> modes;
-    modes.emplace("human", Mode("human", "Write like a real person", []() { return std::uniform_int_distribution<int>(75, 375); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
-    modes.emplace("80s", Mode("80s", "Write like a real person", []() { return std::uniform_int_distribution<int>(5, 25); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
-    modes.emplace("80s-fast", Mode("80s-fast", "Write like a real person", []() { return std::uniform_int_distribution<int>(5, 15); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
-    modes.emplace("wc4", Mode("wc4", "Like the mission screen in Wing Commander 4", []() { return std::uniform_int_distribution<int>(45, 55); }, []() { return std::uniform_int_distribution<int>(55, 275); }));
+    modes.emplace("human", Mode("human", "Write like a real person.", []() { return std::uniform_int_distribution<int>(75, 375); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
+    modes.emplace("80s", Mode("80s", "Print text like in old movies.", []() { return std::uniform_int_distribution<int>(5, 25); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
+    modes.emplace("80s-fast", Mode("80s-fast", "Print text like in old movies, but a bit faster.", []() { return std::uniform_int_distribution<int>(5, 15); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
+    modes.emplace("wc4", Mode("wc4", "Like the mission screen in Wing Commander 4.", []() { return std::uniform_int_distribution<int>(45, 55); }, []() { return std::uniform_int_distribution<int>(55, 275); }));
 
     if (argc > 1) {
         std::string mode{argv[1]};
 
         if (modes.count(mode)) {
             run(modes[mode]);
+        } else if (mode.compare("help") == 0) {
+            showHelp(modes);
         } else {
-            std::cerr << "Unknown mode. Options are " << getAvailableModes(modes) << std::endl;
+            std::cerr << "Unknown mode: " << mode << std::endl;
+            std::cerr << "See 'tw help' for more information." << std::endl;
         }
     } else {
-        std::cerr << "No mode given. Options are " << getAvailableModes(modes) << std::endl;
+        std::cerr << "No mode given." << std::endl;
+        std::cerr << "See 'tw help' for more information." << std::endl;
     }
 
     return 0;

@@ -5,6 +5,7 @@
 ## Added
 
 * New mode wc4.
+* Help page.
 
 ## [v0.2.0] - 2021-05-22
 
