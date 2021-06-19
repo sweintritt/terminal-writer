@@ -51,3 +51,13 @@ Writes like a real person.
 Like the mission screen in Wing Commander 4.
 
 ![80s](doc/wc4.gif "wc4 mode")
+
+# Build
+
+Build the project with
+
+```bash
+$ make
+```
+
+Only standard libraries are used.
