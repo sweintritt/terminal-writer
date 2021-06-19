@@ -56,16 +56,14 @@ void showHelp(const std::map<std::string, Mode>& modes) {
     for (auto mode : modes) {
         std::cout << "  " << std::setw(11) << std::left << mode.second.name << mode.second.description << std::endl;
     }
-
-    //std::cout << std::endl;
 }
 
 int main(int argc, char* argv[]) {
     std::map<std::string, Mode> modes;
     modes.emplace("human", Mode("human", "Write like a real person.", []() { return std::uniform_int_distribution<int>(75, 375); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
     modes.emplace("80s", Mode("80s", "Print text like in old movies.", []() { return std::uniform_int_distribution<int>(5, 25); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
-    modes.emplace("80s-fast", Mode("80s-fast", "Print text like in old movies, but a bit faster.", []() { return std::uniform_int_distribution<int>(5, 15); }, []() { return std::uniform_int_distribution<int>(15, 675); }));
-    modes.emplace("wc4", Mode("wc4", "Like the mission screen in Wing Commander 4.", []() { return std::uniform_int_distribution<int>(45, 55); }, []() { return std::uniform_int_distribution<int>(55, 275); }));
+    modes.emplace("80s-fast", Mode("80s-fast", "Print text like in old movies, but a bit faster.", []() { return std::uniform_int_distribution<int>(5, 15); }, []() { return std::uniform_int_distribution<int>(15, 275); }));
+    modes.emplace("wc4", Mode("wc4", "Like the mission screen in Wing Commander 4.", []() { return std::uniform_int_distribution<int>(45, 55); }, []() { return std::uniform_int_distribution<int>(45, 75); }));
 
     if (argc > 1) {
         std::string mode{argv[1]};
