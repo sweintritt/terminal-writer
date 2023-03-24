@@ -1,10 +1,5 @@
-.PHONY: all clean check run
-
-APP=tw
-SRC=terminal_writer.cpp
-GCC=g++
-STD=c++11
-FLAGS=-std=$(STD) \
+GPP=g++
+CPP_FLAGS=-std=c++11 \
 	  -O3 \
 	  -Wall \
 	  -Werror \
@@ -19,20 +14,15 @@ FLAGS=-std=$(STD) \
 	  -Wfloat-equal \
 	  -ftrapv
 
-all: clean $(APP)
+.PHONY: all
+all: tw_cpp tw_go
 
+.PHONY: clean
 clean:
-	rm -f *.o $(APP)
+	rm -f *.o tw_cpp tw_go
 
-check:
-	cppcheck . \
-	--suppress=missingIncludeSystem \
-	--std=$(STD) \
-	--report-progress \
-	--enable=all \
-	--language=c++ \
-	--inconclusive \
-	--platform=unix64
+tw_cpp: terminal_writer.cpp
+	$(GPP) $(CPP_FLAGS) -o $@ $<
 
-$(APP): $(SRC)
-	$(GCC) $(FLAGS) -o $@ $< $(LIBS)
+tw_go: terminal_writer.go
+	go build -o $@ $<
