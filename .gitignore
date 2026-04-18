@@ -1,3 +1,5 @@
 tw_cpp
 tw_go
 .vscode/
+*.class
+*.o
